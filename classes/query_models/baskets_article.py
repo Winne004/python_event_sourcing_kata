@@ -2,7 +2,7 @@ from dataclasses import field, dataclass
 from datetime import datetime
 
 
-@dataclass
+@dataclass(order=True)
 class Article:
     sort_index: tuple = field(init=False, repr=False)  # Used for sorting
     id: int

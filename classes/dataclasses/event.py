@@ -30,7 +30,7 @@ class ArticleCreated(EventBase):
 @dataclass
 class ArticleReordered(EventBase):
     id: str
-    new_position: int = 0
+    position: int = 0
 
 
 @dataclass

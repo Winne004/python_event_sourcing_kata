@@ -41,32 +41,39 @@ class Article(Aggregate):
 
 @dataclass
 class GroupingAggregate(Aggregate):
-    grouping: list = field(default_factory=list)
+    _size: int = 0
+    _articles: set = field(default_factory=set)
 
-    def __str__(self):
-        return pprint.pformat(self.grouping)
+    def _validate_position(self, position: int):
+        if position < 1 or position > self._size + 1:
+            raise ValueError(
+                "Invalid position. Position must be greater than 0 and less than or equal to the number of articles in the grouping plus 1"
+            )
 
-    def _get_index(self, article_id: str):
-        try:
-            return self.grouping.index(article_id)
-        except ValueError:
-            print(f"Article {article_id} not found in grouping")
+    def _validate_article_exists(self, article_id: str):
+        if article_id not in self._articles:
+            raise ValueError(f"Article {article_id} not found in grouping")
 
-    def add_article_to_grouping(self, article_id: str, position: int = 0):
-        self.grouping.insert(position, article_id)
+    def add_article_to_grouping(self, article_id: str, position: int = 1):
+        self._validate_position(position)
+
         article_created_event = ArticleCreated(self.id, article_id, position)
         self._add_event(article_created_event)
 
-    def reorder_article_in_grouping(self, article_id: str, new_position: int = 0):
-        old_position = self._get_index(article_id)
-        self.grouping.pop(old_position)
+        self._size += 1
+        self._articles.add(article_id)
 
-        self.grouping.insert(new_position, article_id)
+    def reorder_article_in_grouping(self, article_id: str, new_position: int = 1):
+        self._validate_position(new_position)
+        self._validate_article_exists(article_id)
+
         article_reorder_event = ArticleReordered(self.id, article_id, new_position)
         self._add_event(article_reorder_event)
 
     def delete_article_from_grouping(self, article_id: str):
-        self._get_index(article_id)
-        self.grouping.pop(article_id)
+        self._validate_article_exists(article_id)
         article_deleted_event = ArticleDeleted(self.id, article_id)
         self._add_event(article_deleted_event)
+
+        self._articles.remove(article_id)
+        self._size -= 1
