@@ -1,12 +1,9 @@
 from classes.dataclasses.aggregate import GroupingAggregate
-from classes.repositories.event_listener import BasketsProjector
 
 
 grouping = 12345
 
-basket = Baskets()
-
-basket_instance = BasketsProjector(projector=basket)
+# basket_instance = BasketsProjector(projector=basket)
 
 grouping_aggregate = GroupingAggregate(id=grouping, type="grouping")
 

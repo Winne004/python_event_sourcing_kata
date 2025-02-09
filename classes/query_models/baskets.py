@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Generic, Type
+from typing import Generic
 
 from classes.query_models.baskets_article import Article
-from classes.dataclasses.event import T, ArticleCreated, ArticleReordered
+from classes.dataclasses.event import T
 
 
-def transform_event_to_article(event: Type[T]):
+def transform_event_to_article(event: Generic[T]):
     return Article(position=event.position, id=event.id, timestamp=event.timestamp)
 
 
@@ -15,10 +14,10 @@ class Basket:
     articles: list[Article] = field(default_factory=list)
     size: int = 2
 
-    def _transform(self, event: Type[T]):
+    def _transform(self, event: Generic[T]):
         return Article(position=event.position, id=event.id, timestamp=event.timestamp)
 
-    def add_article(self, event: ArticleCreated):
+    def add_article(self, event: Generic[T]):
         article: Article = self._transform(event)
 
         if not (1 <= article.position <= len(self.articles) + 1):
@@ -28,7 +27,7 @@ class Basket:
 
         self._re_index()
 
-    def reorder_article(self, event: ArticleReordered):
+    def reorder_article(self, event: Generic[T]):
         article: Article = self._transform(event)
         for i, _article in enumerate(self.articles):
             if _article.id == article.id:
