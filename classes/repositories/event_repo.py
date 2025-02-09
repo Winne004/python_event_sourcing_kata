@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Generic, List
 
 from classes.dataclasses.event import T
-from classes.repositories.event_manager import EventManager
+from classes.events.event_manager import EventManager
 
 
 @dataclass
@@ -18,6 +18,6 @@ class EventRepo(EventManager):
         self.events[event.partition_key].append(event)
         self.notify(event.name, event)
 
-    def get_events(self, partition_key: str) -> List[T]:
+    def get_events(self, partition_key: str) -> List[Type[T]]:
         """Get all events for a partition key."""
         return sorted(self.events.get(partition_key, []), key=lambda e: e.timestamp)
