@@ -1,4 +1,4 @@
-from classes.dataclasses.aggregate import GroupingAggregate
+from classes.aggregate.aggregate_base import GroupingAggregate
 
 
 grouping = 12345

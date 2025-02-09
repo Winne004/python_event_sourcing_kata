@@ -3,12 +3,12 @@ from typing import Type
 
 
 from classes.query_models.baskets import Baskets
-from classes.dataclasses.event import T, ArticleCreated, ArticleReordered
+from classes.events.event import T
 
 
 class AbstractListener(ABC):
     @abstractmethod
-    def notify(self, event_name: str, event: Type[T]) -> None:
+    def notify(self, event_name: str, event: T) -> None:
         """Handle incoming events."""
         pass
 
@@ -23,17 +23,10 @@ class BasketsProjector(AbstractListener):
         super().__init__()
         self.projector = projector
 
-    def notify(self, event_name: str, event: Type[T]) -> None:
-        mapping = {
-            ArticleCreated.__name__: self.projector.add_article_to_basket,
-            ArticleReordered.__name__: self.projector.reorder_article_in_basket,
-        }
-
-        mapping[event_name](event.partition_key, event)
-
-        print(f"Projecting basket event: {event}")
+    def notify(self, event_name: str, event: T) -> None:
+        pass
 
 
 class ArticlesProjector(AbstractListener):
-    def notify(self, event_name: str, event: Type[T]) -> None:
-        print(f"Projecting article event: {event}")
+    def notify(self, event_name: str, event: T) -> None:
+        pass

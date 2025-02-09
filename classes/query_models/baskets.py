@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Generic
 
 from classes.query_models.baskets_article import Article
-from classes.dataclasses.event import T
+from classes.events.event import T
 
 
 def transform_event_to_article(event: Generic[T]):

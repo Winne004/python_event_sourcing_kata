@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, List
 
-from classes.dataclasses.event import T
+from classes.events.event import T
 from classes.events.event_manager import EventManager
 
 

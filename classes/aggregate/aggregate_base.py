@@ -1,12 +1,15 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import TypeVar
 
 
-from classes.dataclasses.event import (
+from classes.events.event import (
     T,
     event,
 )
 from classes.repositories.event_repo import EventRepo
+
+A = TypeVar("A", bound="Aggregate")
 
 
 @dataclass(kw_only=True)
