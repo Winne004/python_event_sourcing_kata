@@ -5,9 +5,7 @@ import pprint
 
 from classes.dataclasses.event import (
     T,
-    ArticleCreated,
-    ArticleDeleted,
-    ArticleReordered,
+    event,
 )
 from classes.repositories.event_repo import EventRepo
 
@@ -20,8 +18,8 @@ class Aggregate:
     version: int = 1
     event_store = EventRepo()
 
-    def _add_event(self, event: T):
-        self.event_store.store_event(event)
+    def add_event(self, event_instance: T):
+        self.event_store.store_event(event_instance)
         return self
 
     @classmethod
@@ -52,21 +50,14 @@ class GroupingAggregate(Aggregate):
         except ValueError:
             print(f"Article {article_id} not found in grouping")
 
+    @event("ArticleCreated")
     def add_article_to_grouping(self, article_id: str, position: int = 0):
-        self.grouping.insert(position, article_id)
-        article_created_event = ArticleCreated(self.id, article_id, position)
-        self._add_event(article_created_event)
+        pass
 
+    @event("ArticleReordered")
     def reorder_article_in_grouping(self, article_id: str, new_position: int = 0):
-        old_position = self._get_index(article_id)
-        self.grouping.pop(old_position)
+        pass
 
-        self.grouping.insert(new_position, article_id)
-        article_reorder_event = ArticleReordered(self.id, article_id, new_position)
-        self._add_event(article_reorder_event)
-
+    @event("ArticleDeleted")
     def delete_article_from_grouping(self, article_id: str):
-        self._get_index(article_id)
-        self.grouping.pop(article_id)
-        article_deleted_event = ArticleDeleted(self.id, article_id)
-        self._add_event(article_deleted_event)
+        pass

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, Generic, List
 
 from classes.dataclasses.event import T
 from classes.repositories.event_manager import EventManager
@@ -9,9 +9,9 @@ from classes.repositories.event_manager import EventManager
 class EventRepo(EventManager):
     """Repository for storing events."""
 
-    events: Dict[str, List[T]] = field(default_factory=dict)
+    events: Dict[str, List[Generic[T]]] = field(default_factory=dict)
 
-    def store_event(self, event: T):
+    def store_event(self, event: Generic[T]):
         """Store an event in the repository."""
         if event.partition_key not in self.events:
             self.events[event.partition_key] = []
