@@ -13,11 +13,11 @@ class EventRepo(EventManager):
 
     def store_event(self, event: T):
         """Store an event in the repository."""
-        if event.partition_key not in self.events:
-            self.events[event.partition_key] = []
-        self.events[event.partition_key].append(event)
+        if event.id not in self.events:
+            self.events[event.id] = []
+        self.events[event.id].append(event)
         self.notify(event.name, event)
 
-    def get_events(self, partition_key: int) -> List[T]:
+    def get_events(self, id: int) -> List[T]:
         """Get all events for a partition key, sorted by timestamp."""
-        return sorted(self.events.get(partition_key, []), key=lambda e: e.timestamp)
+        return sorted(self.events.get(id, []), key=lambda e: e.timestamp)
