@@ -16,7 +16,7 @@ class EventRepo(EventManager):
         if event.id not in self.events:
             self.events[event.id] = []
         self.events[event.id].append(event)
-        self.notify(event.name, event)
+        self.notify(event)
 
     def get_events(self, id: int) -> List[T]:
         """Get all events for a partition key, sorted by timestamp."""

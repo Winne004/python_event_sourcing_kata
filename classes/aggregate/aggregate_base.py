@@ -18,23 +18,27 @@ class Aggregate:
     type: str
     create_date: datetime = field(default_factory=datetime.now)
     version: int
-    event_store = EventRepo()
+    _event_store: EventRepo | None = None
     _initalised = False
 
     @event("AggregateCreated")
     def __post_init__(self):
+        self.name = self.__class__.__name__
         self._initalised = True
+        if not self._event_store:
+            self.event_store = EventRepo()
 
     def add_event(self, event_instance: T):
-        self.event_store.store_event(event_instance)
+        self._event_store.store_event(event_instance)
         return self
 
     @classmethod
     def load_events(
         self,
         key: str,
+        event_store: EventRepo,
     ):
-        events = self.event_store.get_events(key)
+        events = event_store.get_events(key)
         return events
 
     @property

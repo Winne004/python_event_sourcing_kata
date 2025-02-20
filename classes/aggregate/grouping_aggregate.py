@@ -5,7 +5,7 @@ from classes.events.event import event
 
 @dataclass
 class GroupingAggregate(Aggregate):
-    _size: int = 0
+    size: int
     _articles: set = field(default_factory=set)
 
     def _validate_position(self, position: int):
@@ -29,3 +29,7 @@ class GroupingAggregate(Aggregate):
     @event("ArticleDeleted")
     def delete_article_from_grouping(self, article_id: str):
         pass
+
+    @event("NumberOfStoriesChanged")
+    def set_size(self, size: int):
+        self._size = size
