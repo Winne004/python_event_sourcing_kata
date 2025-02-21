@@ -8,11 +8,13 @@ from typing import TypeVar, Generic
 T = TypeVar("T", bound="EventBase")
 
 
-@dataclass(order=True)
+@dataclass(
+    order=True,
+)
 class EventBase(Generic[T]):
     """Base event class that automatically wraps itself in metadata."""
 
-    id: int
+    aggregate_id: int
     timestamp: datetime = field(default_factory=datetime.now, compare=True)
 
     def __post_init__(self):
@@ -30,10 +32,7 @@ def event(name: str):
         @wraps(func)  # Preserve original function metadata
         def wrapper(self, *args, **kwargs):
             # Extract event data
-            if not getattr(
-                self, "initialized", False
-            ):  # Avoid AttributeError if `initialized` is missing
-                # Capture instance attributes (excluding private/protected ones)
+            if not self._initalised:
                 arg_values = {
                     k: v for k, v in self.__dict__.items() if not k.startswith("_")
                 }
@@ -49,7 +48,7 @@ def event(name: str):
                 arg_values.update(kwargs)
 
                 # Ensure `id` is included
-                arg_values["id"] = self.id
+                arg_values["aggregate_id"] = self.aggregate_id
 
             # arg_values["timestamp"] = datetime.now()
 

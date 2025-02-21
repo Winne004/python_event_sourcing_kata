@@ -14,7 +14,7 @@ A = TypeVar("A", bound="Aggregate")
 
 @dataclass(kw_only=True)
 class Aggregate:
-    id: int
+    aggregate_id: int
     type: str
     create_date: datetime = field(default_factory=datetime.now)
     version: int

@@ -13,9 +13,9 @@ class EventRepo(EventManager):
 
     def store_event(self, event: T):
         """Store an event in the repository."""
-        if event.id not in self.events:
-            self.events[event.id] = []
-        self.events[event.id].append(event)
+        if event.aggregate_id not in self.events:
+            self.events[event.aggregate_id] = []
+        self.events[event.aggregate_id].append(event)
         self.notify(event)
 
     def get_events(self, id: int) -> List[T]:

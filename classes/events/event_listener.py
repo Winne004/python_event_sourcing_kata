@@ -9,11 +9,11 @@ class AbstractListener(ABC):
         pass
 
 
-class BasketsProjector(AbstractListener):
-    def notify(self, event: T):
-        print(f"Projecting basket event {event}")
+# class BasketsProjector(AbstractListener):
+#     def notify(self, event: T):
+#         print(f"Projecting basket event {event}")
 
 
-class ArticlesProjector(AbstractListener):
-    def notify(self, event: T):
-        print(f"Projecting article event {event}")
+# class ArticlesProjector(AbstractListener):
+#     def notify(self, event: T):
+#         print(f"Projecting article event {event}")
